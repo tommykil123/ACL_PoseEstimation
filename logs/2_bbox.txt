@@ -1,0 +1,8 @@
+Original cam1_bbox [[475 150 859 534]]
+Original cam2_bbox [[475 150 859 534]]
+Original cam3_bbox [[475 150 859 534]]
+Original cam4_bbox [[475 150 859 534]]
+New cam1_bbox [[475 150 859 534]]
+New cam2_bbox [[475 150 859 534]]
+New cam3_bbox [[625 225 809 504]]
+New cam4_bbox [[625 225 809 504]]
