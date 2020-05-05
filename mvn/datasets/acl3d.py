@@ -19,9 +19,9 @@ class acl3dMultiViewDataset(Dataset):
     """
     def __init__(self,
                  #acl3d_root='/Vol1/dbstore/datasets/Human3.6M/processed/',
-                 acl3d_root='/data/acl3d/processed/',
+                 acl3d_root='/media/thomaskil/Data Disk Large/_data/acl/data/acl3d/processed/'    ,
                  #labels_path='/Vol1/dbstore/datasets/Human3.6M/extra/human36m-multiview-labels-SSDbboxes.npy',
-                 labels_path='/data/acl3d/acl3d-multiview-labels-GTbboxes.npy',
+                 labels_path='/media/thomaskil/Data Disk Large/_data/acl/data/acl3d/acl3d-multiview-labels-GTbboxes.npy',
                  pred_results_path=None,
                  image_shape=(256, 256),
                  train=False,
@@ -57,7 +57,6 @@ class acl3dMultiViewDataset(Dataset):
         assert train or test, '`acl3dMultiViewDataset` must be constructed with at least ' \
                               'one of `test=True` / `train=True`'
         assert kind in ("mpii", "human36m")
-
         self.acl3d_root = acl3d_root
         self.labels_path = labels_path
         self.image_shape = None if image_shape is None else tuple(image_shape)
@@ -70,7 +69,6 @@ class acl3dMultiViewDataset(Dataset):
         self.crop = crop
 
         self.labels = np.load(labels_path, allow_pickle=True).item()
-        # pdb.set_trace()
         n_cameras = len(self.labels['camera_names'])
         assert all(camera_idx in range(n_cameras) for camera_idx in self.ignore_cameras)
 
@@ -135,14 +133,13 @@ class acl3dMultiViewDataset(Dataset):
 
             # scale the bounding box
             bbox = scale_bbox(bbox, self.scale_bbox)
-
             # load image
-            image_path = os.path.join(
-                self.acl3d_root, subject, action, 'imageSequence' + '-undistorted' * self.undistort_images,
-                camera_name, 'img_%06d.jpg' % (frame_idx+1))
             # image_path = os.path.join(
             #     self.acl3d_root, subject, action, 'imageSequence' + '-undistorted' * self.undistort_images,
-            #     camera_name, '%06d.jpg' % (frame_idx+1))
+            #     camera_name, 'img_%06d.jpg' % (frame_idx+1))
+            image_path = os.path.join(
+                self.acl3d_root, subject, action, 'imageSequence' + '-undistorted' * self.undistort_images,
+                camera_name, '%06d.jpg' % (frame_idx+1))
             assert os.path.isfile(image_path), '%s doesn\'t exist' % image_path
             image = cv2.imread(image_path)
 

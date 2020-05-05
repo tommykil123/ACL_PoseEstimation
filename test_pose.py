@@ -35,13 +35,13 @@ from mvn.datasets import acl3d
 from mvn.datasets import utils as dataset_utils
 from mvn.utils.img import to_numpy
 
-# python test_pose.py --eval --config "/media/thomaskil/Code Disk/GIT/learnable-triangulation-pytorch/experiments/acl3d/eval/acl3d_alg.yaml"
+# python test_pose.py --eval --config "/media/thomaskil/Code Disk/GIT/ACL_PoseEstimation/experiments/acl3d/eval/acl3d_alg.yaml"
 # tensorboard --logdir ./logs
 def parse_args():
     parser = argparse.ArgumentParser()
 
 #    parser.add_argument("--config", type=str, required=True, help="Path, where config file is stored")
-    parser.add_argument("--config", type=str, required=True, help="Path, where config file is stored", default="/media/thomaskil/Code Disk/GIT/learnable-triangulation-pytorch/learnable-triangulation-pytorch/experiments/human36m/eval/human36m_vol_softmax.yaml")
+    parser.add_argument("--config", type=str, required=True, help="Path, where config file is stored", default="/media/thomaskil/Code Disk/GIT/ACL_PoseEstimation/experiments/human36m/eval/human36m_vol_softmax.yaml")
     parser.add_argument('--eval', action='store_true', help="If set, then only evaluation will be done")
     parser.add_argument('--eval_dataset', type=str, default='val', help="Dataset split on which evaluate. Can be 'train' and 'val'")
 
@@ -49,7 +49,7 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
 
 #    parser.add_argument("--logdir", type=str, default="/Vol1/dbstore/datasets/k.iskakov/logs/multi-view-net-repr", help="Path, where logs will be stored")
-    parser.add_argument("--logdir", type=str, default="/media/thomaskil/Code Disk/GIT/learnable-triangulation-pytorch/logs", help="Path, where logs will be stored")
+    parser.add_argument("--logdir", type=str, default="/media/thomaskil/Code Disk/GIT/ACL_PoseEstimation/logs", help="Path, where logs will be stored")
 
     args = parser.parse_args()
     return args
