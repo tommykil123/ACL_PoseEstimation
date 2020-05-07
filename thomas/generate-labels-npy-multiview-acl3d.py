@@ -13,26 +13,6 @@ import pdb
 # (patrick hasn't implemented, use GT)
 BBOXES_SOURCE = 'GT' # or 'MRCNN' or 'SSD'
 
-# retval = {
-#     'subject_names': ['S1', 'S5', 'S6', 'S7', 'S8', 'S9', 'S11'],
-#     'camera_names': ['54138969', '55011271', '58860488', '60457274'],
-#     'action_names': [
-#         'Directions-1', 'Directions-2',
-#         'Discussion-1', 'Discussion-2',
-#         'Eating-1', 'Eating-2',
-#         'Greeting-1', 'Greeting-2',
-#         'Phoning-1', 'Phoning-2',
-#         'Posing-1', 'Posing-2',
-#         'Purchases-1', 'Purchases-2',
-#         'Sitting-1', 'Sitting-2',
-#         'SittingDown-1', 'SittingDown-2',
-#         'Smoking-1', 'Smoking-2',
-#         'TakingPhoto-1', 'TakingPhoto-2',
-#         'Waiting-1', 'Waiting-2',
-#         'Walking-1', 'Walking-2',
-#         'WalkingDog-1', 'WalkingDog-2',
-#         'WalkingTogether-1', 'WalkingTogether-2']
-# }
 retval = {
     'subject_names': ['S26'],
     'camera_names': ['cam1', 'cam2', 'cam3', 'cam4'],
@@ -58,12 +38,10 @@ table_dtype = np.dtype([
 ])
 retval['table'] = []
 
-# h36m_root = sys.argv[1]
-# acl3d_root = sys.argv[1]
-acl3d_root = "/home/thomas/ROB590/learnable-triangulation-pytorch/data/acl3d"
+acl3d_root = "/media/thomaskil/Code Disk/GIT/ACL_PoseEstimation/data/acl3d"
+acl3d_data_root = "/media/thomaskil/Data Disk Large/_data/acl/data/acl3d"
 
-# destination_file_path = os.path.join(h36m_root, "extra", f"human36m-multiview-labels-{BBOXES_SOURCE}bboxes.npy")
-destination_file_path = os.path.join(acl3d_root, "extra", f"acl3d-multiview-labels-{BBOXES_SOURCE}bboxes.npy")
+destination_file_path = os.path.join(acl3d_root, "extra", f"tmp_acl3d-multiview-labels-{BBOXES_SOURCE}bboxes.npy")
 
 # una_dinosauria_root = sys.argv[2]
 # cameras_params = h5py.File(os.path.join(una_dinosauria_root, 'cameras.h5'), 'r')
@@ -139,7 +117,6 @@ def square_the_bbox(bbox):
 
 for subject in bboxes.keys():
     for action in bboxes[subject].keys():
-        pdb.set_trace()
         for camera, bbox_array in bboxes[subject][action].items():
             for frame_idx, bbox in enumerate(bbox_array):
                 bbox[:] = square_the_bbox(bbox)
@@ -192,7 +169,8 @@ for subject in bboxes.keys():
 #from action_to_una_dinosauria import action_to_una_dinosauria
 
 for subject_idx, subject in enumerate(retval['subject_names']):
-    subject_path = os.path.join(acl3d_root, "processed", subject)
+    # subject_path = os.path.join(acl3d_root, "processed", subject)
+    subject_path = os.path.join(acl3d_data_root, "processed", subject)
     actions = os.listdir(subject_path)
     try:
         actions.remove('MySegmentsMat') # folder with bbox *.mat files
@@ -205,14 +183,15 @@ for subject_idx, subject in enumerate(retval['subject_names']):
             raise FileNotFoundError(action_path)
 
         for camera_idx, camera in enumerate(retval['camera_names']):
+            print('Looking at how much pictures in camera: ' + camera)
             camera_path = os.path.join(action_path, camera)
             if os.path.isdir(camera_path):
 #                frame_idxs = sorted([int(name[4:-4])-1 for name in os.listdir(camera_path)])
-                frame_idxs = sorted([int(name[5:-4])-1 for name in os.listdir(camera_path)])
-                assert len(frame_idxs) > 0, 'No frames in %s' % camera_path # otherwise WTF
-                break
-        else:
-            raise FileNotFoundError(action_path)
+                frame_idxs = sorted([int(name[0:6]) for name in os.listdir(camera_path)])
+                # assert len(frame_idxs) > 0, 'No frames in %s' % camera_path # otherwise WTF
+                # break
+            else:
+                raise FileNotFoundError(action_path)
 
         # 16 joints in MPII order + "Neck/Nose"
         valid_joints = (3,2,1,6,7,8,0,12,13,15,27,26,25,17,18,19) + (14,)
@@ -232,6 +211,7 @@ for subject_idx, subject in enumerate(retval['subject_names']):
 
         for (camera_idx, camera) in enumerate(retval['camera_names']):
             camera_path = os.path.join(action_path, camera)
+            pdb.set_trace()
             if not os.path.isdir(camera_path):
                 print('Warning: camera %s isn\'t present in %s/%s' % (camera, subject, action))
                 continue

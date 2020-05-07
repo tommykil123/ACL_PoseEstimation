@@ -74,7 +74,7 @@ class acl3dMultiViewDataset(Dataset):
 
         # train_subjects = ['S1', 'S5', 'S6', 'S7', 'S8']
         test_subjects = ['S26'] # The one that Patrick gave me
-        # train_subjects = list(self.labels['subject_names'].index(x) for x in train_subjects)
+        # train_subjects = list(self.labels['subject_names'].index(x) for x in train_subjects 
         test_subjects  = list(self.labels['subject_names'].index(x) for x in test_subjects)
 
         indices = []
